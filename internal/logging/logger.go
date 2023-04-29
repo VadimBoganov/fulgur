@@ -12,10 +12,9 @@ import (
 
 var once sync.Once
 var instance *logrus.Logger
-
 func GetLogger() *logrus.Logger{
 	once.Do(func(){
-		instance = New()
+		instance = NewLogger()
 	})
 	
 	return instance
@@ -46,7 +45,7 @@ func (hook *writeHook) Levels() []logrus.Level{
 	return hook.LogLevels
 }
 
-func New() *logrus.Logger {
+func NewLogger() *logrus.Logger {
 	l := logrus.New()
 	l.SetReportCaller(true)
 	l.SetFormatter(&logrus.TextFormatter{
