@@ -1,4 +1,4 @@
-databasePath: "~/db/fulgur.db"
+databasePath: "/home/tech/db/fulgur.db"
 logger:
     path: ""
     fileName: ""
