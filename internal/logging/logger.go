@@ -57,12 +57,12 @@ func NewLogger() *logrus.Logger {
 		FullTimestamp: true,
 	})
 	
-	err := os.MkdirAll("logs", 0740)
+	err := os.MkdirAll("../logs", 0740)
 	if err != nil{
 		panic(err)
 	}
 	
-	file, err := os.OpenFile("logs/logs.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
+	file, err := os.OpenFile("../logs/logs.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0640)
 	if err != nil{
 		panic(err)
 	}
