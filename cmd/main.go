@@ -6,7 +6,7 @@ import (
 	logger2 "github.com/VadimBoganov/fulgur/internal/logging"
 )
 
-func main(){
+func main() {
 	logger := logger2.GetLogger()
 
 	var config = &config2.Config{}
@@ -15,13 +15,10 @@ func main(){
 		logger.Error("Error occured while initialize config: %s", err.Error())
 	}
 
-	db, err := db2.NewDB(config.DatabasePath)
-	if db == nil{
-		logger.Error("Cant open db: %s", err.Error())
+	db := db2.NewDB(config.DatabasePath)
+	if db == nil {
+		logger.Error("Cant open db...")
 	}
 
-	err = db2.RunMigrations(db)
-	if err != nil{
-		logger.Error(err)
-	}
+    db2.RunMigrations(db)
 }
