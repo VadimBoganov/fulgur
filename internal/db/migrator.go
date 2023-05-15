@@ -38,10 +38,10 @@ func RunMigrations(db *sql.DB) {
 	err = m.Up()
 	if err != nil {
 		if err != migrate.ErrNoChange {
-			logger.Fatal("Cannot execute migrations", err)
+			logger.Fatal("Cannot execute migrations ", err)
 		}
 
-		logger.Info("Have no new migration for current db...")
+		logger.Info("Have no new migration for current db... ", err)
 	}
 	logger.Info("Migrations was success")
 
