@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"database/sql"
+
 	"github.com/VadimBoganov/fulgur/internal/domain"
 )
 
@@ -30,4 +32,10 @@ type Repository struct {
 	Product
 	ProductItem
 	Item
+}
+
+func NewRepository(db *sql.DB) *Repository {
+	return &Repository{
+		Product: NewProductRespository(db),
+	}
 }

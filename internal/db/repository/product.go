@@ -47,11 +47,9 @@ func (r *ProductRepository) Insert(products []domain.Product) error {
 	query := "INSERT INTO products (id, name) VALUES "
 	var vals []interface{}
 
-	id := 1
 	for _, product := range products {
 		query += "(?, ?),"
-		vals = append(vals, id, product.Name)
-		id++
+		vals = append(vals, product.Id, product.Name)
 	}
 
 	query = query[0 : len(query)-1]

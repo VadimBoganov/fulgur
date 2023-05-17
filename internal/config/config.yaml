@@ -2,3 +2,5 @@ databasePath: "/home/tech/db/fulgur.db"
 logger:
     path: ""
     fileName: ""
+server:
+    port: "8000"

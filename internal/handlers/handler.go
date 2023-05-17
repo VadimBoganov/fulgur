@@ -3,7 +3,7 @@ package handlers
 import (
 	"time"
 
-	logger2 "github.com/VadimBoganov/fulgur/internal/logging"
+	logger2 "github.com/VadimBoganov/fulgur/pkg/logging"
 
 	"github.com/VadimBoganov/fulgur/internal/services"
 	"github.com/gin-contrib/cors"
@@ -23,7 +23,7 @@ func NewHandler(service *services.Service) *Handler {
 func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowOrigins:     []string{"*"},
 		AllowMethods:     []string{"GET"},
 		AllowHeaders:     []string{"Origin"},
 		ExposeHeaders:    []string{"Content-Length", "Content-Type"},
@@ -34,6 +34,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	api := router.Group("/api")
 	{
 		api.GET("/products", h.GetAllProducts)
+		api.POST("/products", h.PostProducts)
 	}
 
 	return router
