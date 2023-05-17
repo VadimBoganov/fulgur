@@ -6,7 +6,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	logger2 "github.com/VadimBoganov/fulgur/internal/logging"
+	logger2 "github.com/VadimBoganov/fulgur/pkg/logging"
 
 	config2 "github.com/VadimBoganov/fulgur/internal/config"
 

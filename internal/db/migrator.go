@@ -3,7 +3,7 @@ package db
 import (
 	"database/sql"
 
-	logger2 "github.com/VadimBoganov/fulgur/internal/logging"
+	logger2 "github.com/VadimBoganov/fulgur/pkg/logging"
 
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/sqlite3"
