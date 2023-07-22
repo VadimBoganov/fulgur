@@ -22,3 +22,5 @@ go.work
 
 .fleet/
 logs/
+db/
+.idea/

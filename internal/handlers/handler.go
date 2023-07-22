@@ -24,8 +24,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	router := gin.New()
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"*"},
-		AllowMethods:     []string{"GET"},
-		AllowHeaders:     []string{"Origin"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
+		AllowHeaders:     []string{"Origin", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length", "Content-Type"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
@@ -35,6 +35,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		api.GET("/products", h.GetAllProducts)
 		api.POST("/products", h.PostProducts)
+		api.PUT("/products/:id", h.UpdateProduct)
+		api.DELETE("/products/:id", h.DeleteProduct)
 	}
 
 	return router

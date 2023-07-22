@@ -16,7 +16,7 @@ func main() {
 	var config = &config2.Config{}
 
 	if err := config.InitConfig("internal/config"); err != nil {
-		logger.Error("Error occured while initialize config: %s", err.Error())
+		logger.Error("Error occurred while initialize config: %s", err.Error())
 	}
 
 	db := db2.NewDB(config.DatabasePath)

@@ -8,6 +8,7 @@ import (
 type Product interface {
 	GetAll() ([]domain.Product, error)
 	Add([]domain.Product) error
+	UpdateById(id int, name string) error
 	RemoveById(id int) error
 }
 

@@ -44,12 +44,12 @@ func (r *ProductRepository) GetAllSubTypes() ([]domain.ProductSubType, error) {
 }
 
 func (r *ProductRepository) Insert(products []domain.Product) error {
-	query := "INSERT INTO products (id, name) VALUES "
+	query := "INSERT INTO products (name) VALUES "
 	var vals []interface{}
 
 	for _, product := range products {
-		query += "(?, ?),"
-		vals = append(vals, product.Id, product.Name)
+		query += "(?),"
+		vals = append(vals, product.Name)
 	}
 
 	query = query[0 : len(query)-1]
@@ -69,6 +69,15 @@ func (r *ProductRepository) Insert(products []domain.Product) error {
 	}
 
 	return err
+}
+
+func (r *ProductRepository) UpdateById(id int, name string) error {
+	_, err := r.db.Exec("update products SET name = ? where id = ?", name, id)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func (r *ProductRepository) RemoveById(id int) error {

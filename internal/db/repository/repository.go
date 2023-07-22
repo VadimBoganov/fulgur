@@ -12,6 +12,9 @@ type Product interface {
 	GetAllSubTypes() ([]domain.ProductSubType, error)
 
 	Insert(products []domain.Product) error
+
+	UpdateById(id int, name string) error
+
 	RemoveById(id int) error
 	RemoveAll() error
 }

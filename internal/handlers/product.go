@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"strconv"
 
 	"github.com/VadimBoganov/fulgur/internal/domain"
 
@@ -44,5 +45,52 @@ func (h *Handler) PostProducts(c *gin.Context) {
 		return
 	}
 
-	c.IndentedJSON(http.StatusCreated, newProducts)
+	c.JSON(http.StatusCreated, newProducts)
+}
+
+func (h *Handler) UpdateProduct(c *gin.Context) {
+	var updatedProduct domain.Product
+
+	var body, err = io.ReadAll(c.Request.Body)
+	if err != nil {
+		logger.Errorf("Error while read products request: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+
+	err = json.Unmarshal(body, &updatedProduct)
+	if err != nil {
+		logger.Errorf("Error while deserialize products request: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+
+	err = h.service.UpdateById(updatedProduct.Id, updatedProduct.Name)
+	if err != nil {
+		logger.Errorf("Error while update product by id to db: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, updatedProduct)
+}
+
+func (h *Handler) DeleteProduct(c *gin.Context) {
+	id := c.Param("id")
+
+	iid, err := strconv.Atoi(id)
+	if err != nil {
+		logger.Errorf("Error while convert id to int: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+
+	err = h.service.RemoveById(iid)
+	if err != nil {
+		logger.Errorf("Error while remove product by id to db: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"data": true})
 }
