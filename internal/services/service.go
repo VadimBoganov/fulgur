@@ -7,7 +7,7 @@ import (
 
 type Product interface {
 	GetAll() ([]domain.Product, error)
-	Add([]domain.Product) error
+	Add([]domain.Product) (int64, error)
 	UpdateById(id int, name string) error
 	RemoveById(id int) error
 }

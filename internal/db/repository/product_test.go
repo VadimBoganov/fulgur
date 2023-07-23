@@ -39,7 +39,7 @@ func TestProductRepository_Insert_Integration(t *testing.T) {
 		t.Skip()
 	}
 
-	_ = repo.Insert(products)
+	_, _ = repo.Insert(products)
 
 	data, _ := repo.GetAll()
 
@@ -54,7 +54,7 @@ func TestProductRepository_RemoveById_Integration(t *testing.T) {
 		t.Skip()
 	}
 
-	_ = repo.Insert(products)
+	_, _ = repo.Insert(products)
 	_ = repo.RemoveById(1)
 
 	data, _ := repo.GetAll()

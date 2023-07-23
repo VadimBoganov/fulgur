@@ -19,7 +19,7 @@ func (s *ProductService) GetAll() ([]domain.Product, error) {
 	return s.repo.GetAll()
 }
 
-func (s *ProductService) Add(products []domain.Product) error {
+func (s *ProductService) Add(products []domain.Product) (int64, error) {
 	return s.repo.Insert(products)
 }
 

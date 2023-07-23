@@ -43,7 +43,7 @@ func (r *ProductRepository) GetAllSubTypes() ([]domain.ProductSubType, error) {
 	return nil, nil
 }
 
-func (r *ProductRepository) Insert(products []domain.Product) error {
+func (r *ProductRepository) Insert(products []domain.Product) (int64, error) {
 	query := "INSERT INTO products (name) VALUES "
 	var vals []interface{}
 
@@ -56,19 +56,23 @@ func (r *ProductRepository) Insert(products []domain.Product) error {
 
 	stmt, err := r.db.Prepare(query)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
 	defer func(stmt *sql.Stmt) {
 		_ = stmt.Close()
 	}(stmt)
 
-	_, err = stmt.Exec(vals...)
+	res, err := stmt.Exec(vals...)
 	if err != nil {
-		return err
+		return 0, err
 	}
 
-	return err
+	lid, err := res.LastInsertId()
+	if err != nil {
+		return 0, err
+	}
+	return lid, err
 }
 
 func (r *ProductRepository) UpdateById(id int, name string) error {

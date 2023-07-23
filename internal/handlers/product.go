@@ -38,14 +38,19 @@ func (h *Handler) PostProducts(c *gin.Context) {
 		return
 	}
 
-	err = h.service.Add(newProducts)
+	lid, err := h.service.Add(newProducts)
 	if err != nil {
 		logger.Errorf("Error while send products to db: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
 
-	c.JSON(http.StatusCreated, newProducts)
+	if len(newProducts) < 2 {
+		newProducts[0].Id = int(lid)
+		c.JSON(http.StatusCreated, newProducts)
+	} else {
+		c.JSON(http.StatusCreated, newProducts)
+	}
 }
 
 func (h *Handler) UpdateProduct(c *gin.Context) {
@@ -92,5 +97,5 @@ func (h *Handler) DeleteProduct(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"data": true})
+	c.JSON(http.StatusOK, iid)
 }
