@@ -35,14 +35,6 @@ func (r *ProductRepository) GetAll() ([]domain.Product, error) {
 	return products, nil
 }
 
-func (r *ProductRepository) GetAllTypes() ([]domain.ProductType, error) {
-	return nil, nil
-}
-
-func (r *ProductRepository) GetAllSubTypes() ([]domain.ProductSubType, error) {
-	return nil, nil
-}
-
 func (r *ProductRepository) Insert(products []domain.Product) (int64, error) {
 	query := "INSERT INTO products (name) VALUES "
 	var vals []interface{}
@@ -84,7 +76,7 @@ func (r *ProductRepository) UpdateById(id int, name string) error {
 	return nil
 }
 
-func (r *ProductRepository) RemoveById(id int) error {
+func (r *ProductRepository) Remove(id int) error {
 	_, err := r.db.Exec("delete from products where id = ?", id)
 	if err != nil {
 		return err

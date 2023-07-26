@@ -8,15 +8,22 @@ import (
 
 type Product interface {
 	GetAll() ([]domain.Product, error)
-	GetAllTypes() ([]domain.ProductType, error)
-	GetAllSubTypes() ([]domain.ProductSubType, error)
 
+	// TODO: rewrite to InsertAll(InsertBulk) and add insert product
 	Insert(products []domain.Product) (int64, error)
 
+	// TODO: name update and rewrite signature
 	UpdateById(id int, name string) error
 
-	RemoveById(id int) error
+	Remove(id int) error
 	RemoveAll() error
+}
+
+type ProductType interface {
+	GetAll() ([]domain.ProductType, error)
+	Insert(pt domain.ProductType) (int64, error)
+	Update(pt domain.ProductType) error
+	Remove(id int) error
 }
 
 type ProductItem interface {
@@ -33,12 +40,14 @@ type Item interface {
 
 type Repository struct {
 	Product
+	ProductType
 	ProductItem
 	Item
 }
 
 func NewRepository(db *sql.DB) *Repository {
 	return &Repository{
-		Product: NewProductRespository(db),
+		Product:     NewProductRespository(db),
+		ProductType: NewProductTypeRepository(db),
 	}
 }

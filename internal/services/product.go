@@ -28,5 +28,5 @@ func (s *ProductService) UpdateById(id int, name string) error {
 }
 
 func (s *ProductService) RemoveById(id int) error {
-	return s.repo.RemoveById(id)
+	return s.repo.Remove(id)
 }

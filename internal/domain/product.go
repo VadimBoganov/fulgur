@@ -8,9 +8,9 @@ type Product struct {
 
 // Оловянно-свинцовые припои, Индиевые припои
 type ProductType struct {
-	Id      int
-	Product Product
-	Name    string
+	Id        int
+	ProductId int
+	Name      string
 }
 
 // Малосурьмянистые, Сурьмянистые

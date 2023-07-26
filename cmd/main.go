@@ -27,7 +27,8 @@ func main() {
 	db2.RunMigrations(db)
 
 	productRepository := repository2.NewProductRespository(db)
-	service := services.NewService(productRepository)
+	productTypeRepo := repository2.NewProductTypeRepository(db)
+	service := services.NewService(productRepository, productTypeRepo)
 	handler := handlers.NewHandler(service)
 
 	server := new(fulgur.Server)

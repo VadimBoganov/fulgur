@@ -12,10 +12,21 @@ type Product interface {
 	RemoveById(id int) error
 }
 
-type Service struct {
-	Product
+type ProductType interface {
+	GetAll() ([]domain.ProductType, error)
+	Add(domain.ProductType) (int64, error)
+	Update(domain.ProductType) error
+	Remove(id int) error
 }
 
-func NewService(repo *repository.ProductRepository) *Service {
-	return &Service{Product: NewProductService(repo)}
+type Service struct {
+	Product
+	ProductType
+}
+
+func NewService(productRepo *repository.ProductRepository, productTypeRepo *repository.ProductTypeRepository) *Service {
+	return &Service{
+		Product:     NewProductService(productRepo),
+		ProductType: NewProductTypeService(productTypeRepo),
+	}
 }

@@ -7,22 +7,21 @@ import (
 	"strconv"
 
 	"github.com/VadimBoganov/fulgur/internal/domain"
-
 	"github.com/gin-gonic/gin"
 )
 
-func (h *Handler) GetAllProducts(c *gin.Context) {
-	products, err := h.service.Product.GetAll()
+func (h *Handler) GetAllProductTypes(c *gin.Context) {
+	pts, err := h.service.ProductType.GetAll()
 	if err != nil {
 		logger.Errorf("Error while handle get all products request: %s", err.Error())
 		return
 	}
 
-	c.JSON(http.StatusOK, products)
+	c.JSON(http.StatusOK, pts)
 }
 
-func (h *Handler) PostProducts(c *gin.Context) {
-	var newProducts []domain.Product
+func (h *Handler) PostPorductType(c *gin.Context) {
+	var newPt domain.ProductType
 
 	var body, err = io.ReadAll(c.Request.Body)
 	if err != nil {
@@ -31,30 +30,27 @@ func (h *Handler) PostProducts(c *gin.Context) {
 		return
 	}
 
-	err = json.Unmarshal(body, &newProducts)
+	err = json.Unmarshal(body, &newPt)
 	if err != nil {
 		logger.Errorf("Error while deserialize products request: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
 
-	lid, err := h.service.Product.Add(newProducts)
+	iid, err := h.service.ProductType.Add(newPt)
 	if err != nil {
 		logger.Errorf("Error while send products to db: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
 
-	if len(newProducts) < 2 {
-		newProducts[0].Id = int(lid)
-		c.JSON(http.StatusCreated, newProducts)
-	} else {
-		c.JSON(http.StatusCreated, newProducts)
-	}
+	newPt.Id = int(iid)
+
+	c.JSON(http.StatusCreated, newPt)
 }
 
-func (h *Handler) UpdateProduct(c *gin.Context) {
-	var updatedProduct domain.Product
+func (h *Handler) UpdateProductType(c *gin.Context) {
+	var updatedPt domain.ProductType
 
 	var body, err = io.ReadAll(c.Request.Body)
 	if err != nil {
@@ -63,24 +59,24 @@ func (h *Handler) UpdateProduct(c *gin.Context) {
 		return
 	}
 
-	err = json.Unmarshal(body, &updatedProduct)
+	err = json.Unmarshal(body, &updatedPt)
 	if err != nil {
 		logger.Errorf("Error while deserialize products request: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
 
-	err = h.service.Product.UpdateById(updatedProduct.Id, updatedProduct.Name)
+	err = h.service.ProductType.Update(updatedPt)
 	if err != nil {
 		logger.Errorf("Error while update product by id to db: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
 
-	c.JSON(http.StatusOK, updatedProduct)
+	c.JSON(http.StatusOK, updatedPt)
 }
 
-func (h *Handler) DeleteProduct(c *gin.Context) {
+func (h *Handler) DeleteProductType(c *gin.Context) {
 	id := c.Param("id")
 
 	iid, err := strconv.Atoi(id)
@@ -90,7 +86,7 @@ func (h *Handler) DeleteProduct(c *gin.Context) {
 		return
 	}
 
-	err = h.service.Product.RemoveById(iid)
+	err = h.service.ProductType.Remove(iid)
 	if err != nil {
 		logger.Errorf("Error while remove product by id to db: %s", err.Error())
 		_ = c.AbortWithError(400, err)

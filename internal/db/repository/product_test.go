@@ -55,7 +55,7 @@ func TestProductRepository_RemoveById_Integration(t *testing.T) {
 	}
 
 	_, _ = repo.Insert(products)
-	_ = repo.RemoveById(1)
+	_ = repo.Remove(1)
 
 	data, _ := repo.GetAll()
 
