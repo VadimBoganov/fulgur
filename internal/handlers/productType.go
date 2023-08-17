@@ -25,21 +25,21 @@ func (h *Handler) PostPorductType(c *gin.Context) {
 
 	var body, err = io.ReadAll(c.Request.Body)
 	if err != nil {
-		logger.Errorf("Error while read products request: %s", err.Error())
+		logger.Errorf("Error while read product types request: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
 
 	err = json.Unmarshal(body, &newPt)
 	if err != nil {
-		logger.Errorf("Error while deserialize products request: %s", err.Error())
+		logger.Errorf("Error while deserialize product types request: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
 
 	iid, err := h.service.ProductType.Add(newPt)
 	if err != nil {
-		logger.Errorf("Error while send products to db: %s", err.Error())
+		logger.Errorf("Error while send product typs to db: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
@@ -54,21 +54,21 @@ func (h *Handler) UpdateProductType(c *gin.Context) {
 
 	var body, err = io.ReadAll(c.Request.Body)
 	if err != nil {
-		logger.Errorf("Error while read products request: %s", err.Error())
+		logger.Errorf("Error while read product type request: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
 
 	err = json.Unmarshal(body, &updatedPt)
 	if err != nil {
-		logger.Errorf("Error while deserialize products request: %s", err.Error())
+		logger.Errorf("Error while deserialize product types request: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
 
 	err = h.service.ProductType.Update(updatedPt)
 	if err != nil {
-		logger.Errorf("Error while update product by id to db: %s", err.Error())
+		logger.Errorf("Error while update product type by id to db: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}
@@ -88,7 +88,7 @@ func (h *Handler) DeleteProductType(c *gin.Context) {
 
 	err = h.service.ProductType.Remove(iid)
 	if err != nil {
-		logger.Errorf("Error while remove product by id to db: %s", err.Error())
+		logger.Errorf("Error while remove product type by id to db: %s", err.Error())
 		_ = c.AbortWithError(400, err)
 		return
 	}

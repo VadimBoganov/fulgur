@@ -44,6 +44,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		api.POST("/producttypes", h.PostPorductType)
 		api.PUT("/producttypes", h.UpdateProductType)
 		api.DELETE("/producttypes/:id", h.DeleteProductType)
+
+		api.GET("/productsubtypes", h.GetAllProductSubtypes)
+		api.POST("/productsubtypes", h.PostPorductSubtype)
+		api.PUT("/productsubtypes", h.UpdateProductSubtype)
+		api.DELETE("/productsubtypes/:id", h.DeleteProductSubype)
 	}
 
 	return router

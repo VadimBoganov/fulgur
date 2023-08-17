@@ -15,7 +15,7 @@ type ProductType struct {
 
 // Малосурьмянистые, Сурьмянистые
 type ProductSubType struct {
-	Id          int
-	ProductType ProductType
-	Name        string
+	Id            int
+	ProductTypeId int
+	Name          string
 }

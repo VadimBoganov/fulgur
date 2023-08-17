@@ -28,7 +28,8 @@ func main() {
 
 	productRepository := repository2.NewProductRespository(db)
 	productTypeRepo := repository2.NewProductTypeRepository(db)
-	service := services.NewService(productRepository, productTypeRepo)
+	productSubtypeRepo := repository2.NewProductSubtypeRepository(db)
+	service := services.NewService(productRepository, productTypeRepo, productSubtypeRepo)
 	handler := handlers.NewHandler(service)
 
 	server := new(fulgur.Server)
