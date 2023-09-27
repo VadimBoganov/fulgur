@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"math"
 	"time"
 
 	logger2 "github.com/VadimBoganov/fulgur/pkg/logging"
@@ -33,6 +34,8 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	})
 	router.Use(corsConfig)
 
+	router.Static("/public", "./public")
+
 	api := router.Group("/api")
 	{
 		api.GET("/products", h.GetAllProducts)
@@ -49,6 +52,16 @@ func (h *Handler) InitRoutes() *gin.Engine {
 		api.POST("/productsubtypes", h.PostPorductSubtype)
 		api.PUT("/productsubtypes", h.UpdateProductSubtype)
 		api.DELETE("/productsubtypes/:id", h.DeleteProductSubype)
+
+		api.GET("/productitems", h.GetAllProductItems)
+		api.POST("/productitems", h.PostPorductItem)
+		api.PUT("/productitems", h.UpdateProductItem)
+		api.DELETE("/productitems/:id", h.DeleteProductItem)
+
+		api.GET("/items", h.GetAllItems)
+		api.POST("/items", h.PostItem)
+		api.PUT("/items", h.UpdateItem)
+		api.DELETE("/items/:id", h.DeleteItem)
 	}
 
 	return router
@@ -68,4 +81,13 @@ func CORSMiddleware() gin.HandlerFunc {
 
 		c.Next()
 	}
+}
+
+func round(num float64) int {
+	return int(num + math.Copysign(0.5, num))
+}
+
+func toFixed(num float64, precision int) float64 {
+	output := math.Pow(10, float64(precision))
+	return float64(round(num*output)) / output
 }

@@ -19,14 +19,15 @@ import (
 var logger = logger2.GetLogger()
 var products []domain.Product
 var repo *repository.ProductRepository
-var config = &config2.Config{}
 
 func TestMain(m *testing.M) {
 	products = []domain.Product{{Name: "pripoi"}, {Name: "metal"}}
 
-	if err := config.InitConfig("../../config"); err != nil {
+	if err := config2.InitConfig("../../config"); err != nil {
 		logger.Error("Error occured while initialize config: ", err.Error())
 	}
+
+	config := config2.GetConfig()
 
 	database := db.NewDB(config.DatabasePath)
 	repo = repository.NewProductRespository(database)

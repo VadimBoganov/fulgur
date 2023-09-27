@@ -1,8 +1,15 @@
 package services
 
 import (
+	"io"
+	"mime/multipart"
+	"os"
+	"time"
+
+	"github.com/VadimBoganov/fulgur/internal/config"
 	"github.com/VadimBoganov/fulgur/internal/db/repository"
 	"github.com/VadimBoganov/fulgur/internal/domain"
+	"github.com/jlaffaye/ftp"
 )
 
 type Product interface {
@@ -26,16 +33,83 @@ type ProductSubtype interface {
 	Remove(id int) error
 }
 
+type ProductItem interface {
+	GetAll() ([]domain.ProductItem, error)
+	Add(domain.ProductItem, *multipart.FileHeader) (int64, error)
+	Update(domain.ProductItem, *multipart.FileHeader) error
+	Remove(id int) error
+}
+
+type Item interface {
+	GetAll() ([]domain.Item, error)
+	Add(domain.Item, *multipart.FileHeader) (int64, error)
+	Update(domain.Item, *multipart.FileHeader) error
+	Remove(id int) error
+}
+
 type Service struct {
 	Product
 	ProductType
 	ProductSubtype
+	ProductItem
+	Item
 }
 
-func NewService(productRepo *repository.ProductRepository, productTypeRepo *repository.ProductTypeRepository, productSubtypeRepo *repository.ProductSubtypeRepository) *Service {
+func NewService(productRepo *repository.ProductRepository, productTypeRepo *repository.ProductTypeRepository, productSubtypeRepo *repository.ProductSubtypeRepository, productItemRepo *repository.ProductItemRepository, ItemRepo *repository.ItemRepository) *Service {
 	return &Service{
 		Product:        NewProductService(productRepo),
 		ProductType:    NewProductTypeService(productTypeRepo),
 		ProductSubtype: NewProductSubtypeService(productSubtypeRepo),
+		ProductItem:    NewProductItemService(productItemRepo),
+		Item:           NewItemService(ItemRepo),
 	}
+}
+
+func makeFile(filePath string, header *multipart.FileHeader) error {
+	infile, err := header.Open()
+	if err != nil {
+		return err
+	}
+
+	defer infile.Close()
+
+	var outfile *os.File
+	if outfile, err = os.Create(filePath + header.Filename); nil != err {
+		return err
+	}
+
+	if _, err = io.Copy(outfile, infile); nil != err {
+		return err
+	}
+
+	return nil
+}
+
+func sendToFtp(config *config.Config, header *multipart.FileHeader) error {
+	c, err := ftp.Dial(os.Getenv("FTP_HOST")+":"+os.Getenv("FTP_PORT"), ftp.DialWithTimeout(5*time.Second))
+	if err != nil {
+		return err
+	}
+
+	err = c.Login(os.Getenv("FTP_LOGIN"), os.Getenv("FTP_PASS"))
+	if err != nil {
+		return err
+	}
+
+	fileName := header.Filename
+	file, err := os.Open(config.LocalFilePath + fileName)
+	if err != nil {
+		return err
+	}
+
+	err = c.Stor(config.FTPPath+fileName, file)
+	if err != nil {
+		return err
+	}
+
+	if err = c.Quit(); err != nil {
+		return err
+	}
+
+	return nil
 }

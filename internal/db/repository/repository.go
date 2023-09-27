@@ -35,14 +35,16 @@ type ProductSubtype interface {
 
 type ProductItem interface {
 	GetAll() ([]domain.ProductItem, error)
-	Insert(productItems []domain.ProductItem) error
-	Remove(productItems []domain.ProductItem) error
+	Insert(pi domain.ProductItem) (int64, error)
+	Update(pi domain.ProductItem) error
+	Remove(id int) error
 }
 
 type Item interface {
 	GetAll() ([]domain.Item, error)
-	Insert(items []domain.Item) error
-	Remove(items []domain.Item) error
+	Insert(item domain.Item) (int64, error)
+	Update(item domain.Item) error
+	Remove(id int) error
 }
 
 type Repository struct {
@@ -58,5 +60,6 @@ func NewRepository(db *sql.DB) *Repository {
 		Product:        NewProductRespository(db),
 		ProductType:    NewProductTypeRepository(db),
 		ProductSubtype: NewProductSubtypeRepository(db),
+		ProductItem:    NewProductItemRepository(db),
 	}
 }

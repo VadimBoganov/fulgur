@@ -8,8 +8,10 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.15.2
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/viper v1.15.0
-	github.com/stretchr/testify v1.8.2
+	github.com/stretchr/testify v1.8.3
 )
+
+require github.com/joho/godotenv v1.5.1 // indirect
 
 require (
 	github.com/bytedance/sonic v1.8.8 // indirect
@@ -24,6 +26,7 @@ require (
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/go-multierror v1.1.1 // indirect
 	github.com/hashicorp/hcl v1.0.0 // indirect
+	github.com/jlaffaye/ftp v0.2.0
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.4 // indirect
 	github.com/leodido/go-urn v1.2.4 // indirect

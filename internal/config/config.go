@@ -5,9 +5,12 @@ import (
 )
 
 type Config struct {
-	DatabasePath string       `mapstructure:"databasePath"`
-	Logger       LoggerConfig `mapstructure:"logger"`
-	Server       ServerConfig `mapstructure:server`
+	DatabasePath  string       `mapstructure:"databasePath"`
+	FTPPath       string       `mapstructure:"ftpPath"`
+	LocalFilePath string       `mapstructure:"localFilePath"`
+	FtpUrl        string       `mapstructure:"ftpUrl"`
+	Logger        LoggerConfig `mapstructure:"logger"`
+	Server        ServerConfig `mapstructure:"server"`
 }
 
 type LoggerConfig struct {
@@ -19,7 +22,9 @@ type ServerConfig struct {
 	Port string `mapstructure:"port"`
 }
 
-func (c *Config) InitConfig(path string) error {
+var config Config
+
+func InitConfig(path string) error {
 	viper.SetConfigName("config")
 	viper.SetConfigType("yaml")
 	viper.AddConfigPath(path)
@@ -27,5 +32,9 @@ func (c *Config) InitConfig(path string) error {
 		return err
 	}
 
-	return viper.Unmarshal(&c)
+	return viper.Unmarshal(&config)
+}
+
+func GetConfig() *Config {
+	return &config
 }

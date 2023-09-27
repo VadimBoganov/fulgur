@@ -13,11 +13,11 @@ import (
 func main() {
 	logger := logger2.GetLogger()
 
-	var config = &config2.Config{}
-
-	if err := config.InitConfig("internal/config"); err != nil {
-		logger.Error("Error occurred while initialize config: %s", err.Error())
+	if err := config2.InitConfig("internal/config"); err != nil {
+		logger.Errorf("Error occurred while initialize config: %s", err.Error())
 	}
+
+	config := config2.GetConfig()
 
 	db := db2.NewDB(config.DatabasePath)
 	if db == nil {
@@ -29,7 +29,9 @@ func main() {
 	productRepository := repository2.NewProductRespository(db)
 	productTypeRepo := repository2.NewProductTypeRepository(db)
 	productSubtypeRepo := repository2.NewProductSubtypeRepository(db)
-	service := services.NewService(productRepository, productTypeRepo, productSubtypeRepo)
+	productItemRepo := repository2.NewProductItemRepository(db)
+	itemRepo := repository2.NewItemRepository(db)
+	service := services.NewService(productRepository, productTypeRepo, productSubtypeRepo, productItemRepo, itemRepo)
 	handler := handlers.NewHandler(service)
 
 	server := new(fulgur.Server)

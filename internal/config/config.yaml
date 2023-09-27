@@ -1,4 +1,7 @@
 databasePath: "D:/Dev/fulgur/db/fulgur.db"
+ftpPath: "domains/gk-fulgur.ru/public_html/images/"
+localFilePath: "./public/"
+ftpUrl: "https://gk-fulgur.ru/images/"
 logger:
     path: ""
     fileName: ""

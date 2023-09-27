@@ -24,3 +24,5 @@ go.work
 logs/
 db/
 .idea/
+.env
+/public
