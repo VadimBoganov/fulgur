@@ -35,6 +35,7 @@ type ProductSubtype interface {
 
 type ProductItem interface {
 	GetAll() ([]domain.ProductItem, error)
+	GetById(id int) (*domain.ProductItem, error)
 	Insert(pi domain.ProductItem) (int64, error)
 	Update(pi domain.ProductItem) error
 	Remove(id int) error
@@ -42,6 +43,7 @@ type ProductItem interface {
 
 type Item interface {
 	GetAll() ([]domain.Item, error)
+	GetById(id int) (*domain.Item, error)
 	Insert(item domain.Item) (int64, error)
 	Update(item domain.Item) error
 	Remove(id int) error
@@ -61,5 +63,6 @@ func NewRepository(db *sql.DB) *Repository {
 		ProductType:    NewProductTypeRepository(db),
 		ProductSubtype: NewProductSubtypeRepository(db),
 		ProductItem:    NewProductItemRepository(db),
+		Item:           NewItemRepository(db),
 	}
 }

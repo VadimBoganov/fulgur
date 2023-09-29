@@ -127,6 +127,15 @@ func (h *Handler) UpdateItem(c *gin.Context) {
 		config := config.GetConfig()
 		item.ImageUrl = config.FtpUrl + headers[0].Filename
 	} else {
+		data, err := h.service.Item.GetById(int(item.Id))
+		if err != nil {
+			logger.Errorf("Error while get item from db: %s", err.Error())
+			_ = c.AbortWithError(400, err)
+			return
+		}
+		if data.ImageUrl != "" {
+			item.ImageUrl = data.ImageUrl
+		}
 		err = h.service.Item.Update(item, nil)
 	}
 

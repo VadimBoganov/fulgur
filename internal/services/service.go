@@ -35,6 +35,7 @@ type ProductSubtype interface {
 
 type ProductItem interface {
 	GetAll() ([]domain.ProductItem, error)
+	GetById(id int) (*domain.ProductItem, error)
 	Add(domain.ProductItem, *multipart.FileHeader) (int64, error)
 	Update(domain.ProductItem, *multipart.FileHeader) error
 	Remove(id int) error
@@ -42,6 +43,7 @@ type ProductItem interface {
 
 type Item interface {
 	GetAll() ([]domain.Item, error)
+	GetById(id int) (*domain.Item, error)
 	Add(domain.Item, *multipart.FileHeader) (int64, error)
 	Update(domain.Item, *multipart.FileHeader) error
 	Remove(id int) error

@@ -23,6 +23,10 @@ func (s *ItemService) GetAll() ([]domain.Item, error) {
 	return s.repo.GetAll()
 }
 
+func (s *ItemService) GetById(id int) (*domain.Item, error) {
+	return s.repo.GetById(id)
+}
+
 func (s *ItemService) Add(item domain.Item, header *multipart.FileHeader) (int64, error) {
 	config := config.GetConfig()
 

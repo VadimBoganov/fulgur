@@ -53,6 +53,15 @@ func (h *Handler) PostPorductItem(c *gin.Context) {
 		config := config.GetConfig()
 		newPi.ImageUrl = config.FtpUrl + headers[0].Filename
 	} else {
+		data, err := h.service.ProductItem.GetById(int(newPi.Id))
+		if err != nil {
+			logger.Errorf("Error while get product item from db: %s", err.Error())
+			_ = c.AbortWithError(400, err)
+			return
+		}
+		if data.ImageUrl != "" {
+			newPi.ImageUrl = data.ImageUrl
+		}
 		iid, err = h.service.ProductItem.Add(newPi, nil)
 	}
 
@@ -108,6 +117,15 @@ func (h *Handler) UpdateProductItem(c *gin.Context) {
 		config := config.GetConfig()
 		updatedPi.ImageUrl = config.FtpUrl + headers[0].Filename
 	} else {
+		data, err := h.service.ProductItem.GetById(int(updatedPi.Id))
+		if err != nil {
+			logger.Errorf("Error while get product item from db: %s", err.Error())
+			_ = c.AbortWithError(400, err)
+			return
+		}
+		if data.ImageUrl != "" {
+			updatedPi.ImageUrl = data.ImageUrl
+		}
 		err = h.service.ProductItem.Update(updatedPi, nil)
 	}
 
