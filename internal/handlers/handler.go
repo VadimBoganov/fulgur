@@ -38,6 +38,10 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	api := router.Group("/api")
 	{
+		api.POST("/register", h.Register)
+		api.POST("/login", h.Login)
+		api.POST("/logout", h.Logout)
+
 		api.GET("/products", h.GetAllProducts)
 		api.POST("/products", h.PostProducts)
 		api.PUT("/products/:id", h.UpdateProduct)

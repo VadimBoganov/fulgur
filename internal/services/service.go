@@ -49,21 +49,32 @@ type Item interface {
 	Remove(id int) error
 }
 
+type User interface {
+	GetAll() ([]domain.User, error)
+	GetById(id int) (*domain.User, error)
+	GetByEmail(email string) (*domain.User, error)
+	Add(*domain.User) (int64, error)
+	Update(*domain.User) error
+	Remove(id int) error
+}
+
 type Service struct {
 	Product
 	ProductType
 	ProductSubtype
 	ProductItem
 	Item
+	User
 }
 
-func NewService(productRepo *repository.ProductRepository, productTypeRepo *repository.ProductTypeRepository, productSubtypeRepo *repository.ProductSubtypeRepository, productItemRepo *repository.ProductItemRepository, ItemRepo *repository.ItemRepository) *Service {
+func NewService(productRepo *repository.ProductRepository, productTypeRepo *repository.ProductTypeRepository, productSubtypeRepo *repository.ProductSubtypeRepository, productItemRepo *repository.ProductItemRepository, ItemRepo *repository.ItemRepository, UserRepo *repository.UserRepository) *Service {
 	return &Service{
 		Product:        NewProductService(productRepo),
 		ProductType:    NewProductTypeService(productTypeRepo),
 		ProductSubtype: NewProductSubtypeService(productSubtypeRepo),
 		ProductItem:    NewProductItemService(productItemRepo),
 		Item:           NewItemService(ItemRepo),
+		User:           NewUserService(UserRepo),
 	}
 }
 

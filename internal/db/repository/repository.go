@@ -49,12 +49,22 @@ type Item interface {
 	Remove(id int) error
 }
 
+type User interface {
+	GetAll() ([]domain.User, error)
+	GetById(id int) (*domain.User, error)
+	GetByEmail(email string) (*domain.User, error)
+	Insert(item *domain.User) (int64, error)
+	Update(item *domain.User) error
+	Remove(id int) error
+}
+
 type Repository struct {
 	Product
 	ProductType
 	ProductSubtype
 	ProductItem
 	Item
+	User
 }
 
 func NewRepository(db *sql.DB) *Repository {
@@ -64,5 +74,6 @@ func NewRepository(db *sql.DB) *Repository {
 		ProductSubtype: NewProductSubtypeRepository(db),
 		ProductItem:    NewProductItemRepository(db),
 		Item:           NewItemRepository(db),
+		User:           NewUserRepository(db),
 	}
 }
