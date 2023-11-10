@@ -51,13 +51,7 @@ func (h *Handler) Login(c *gin.Context) {
 	}
 
 	user, err := h.service.GetByEmail(data["email"].(string))
-	if err != nil {
-		logger.Errorf("Error while get user by email: %s", err.Error())
-		_ = c.AbortWithError(400, err)
-		return
-	}
-
-	if user.Id == 0 {
+	if err != nil || user == nil || user.Id == 0 {
 		c.AbortWithStatusJSON(http.StatusNotFound, "user not found")
 		return
 	}
@@ -109,4 +103,41 @@ func (h *Handler) Logout(c *gin.Context) {
 	http.SetCookie(c.Writer, &cookie)
 
 	c.JSON(http.StatusAccepted, "success")
+}
+
+func (h *Handler) User(c *gin.Context) {
+	cookie, err := c.Cookie("jwt")
+	if err != nil {
+		logger.Errorf("Error while read cookie from request: %s", err.Error())
+		c.JSON(http.StatusAccepted, "")
+		return
+	}
+
+	token, err := jwt.ParseWithClaims(cookie, &jwt.StandardClaims{}, func(t *jwt.Token) (interface{}, error) {
+		return []byte(os.Getenv("SECRET_KEY")), nil
+	})
+
+	if err != nil {
+		logger.Errorf("Error while read token from cookie: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+
+	claims := token.Claims.(*jwt.StandardClaims)
+
+	id, err := strconv.Atoi(claims.Issuer)
+	if err != nil {
+		logger.Errorf("Error while convert id: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+
+	user, err := h.service.User.GetById(id)
+	if err != nil {
+		logger.Errorf("Error while get user by id from db: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+
+	c.JSON(http.StatusAccepted, user)
 }

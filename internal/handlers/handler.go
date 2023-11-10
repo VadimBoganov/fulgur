@@ -25,7 +25,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	router := gin.New()
 	corsConfig := cors.New(cors.Config{
-		AllowOrigins:     []string{"*"},
+		AllowOrigins:     []string{"http://localhost:3000"},
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},
@@ -38,6 +38,7 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	api := router.Group("/api")
 	{
+		api.GET("user", h.User)
 		api.POST("/register", h.Register)
 		api.POST("/login", h.Login)
 		api.POST("/logout", h.Logout)
