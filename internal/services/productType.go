@@ -19,6 +19,10 @@ func (s *ProductTypeService) GetAll() ([]domain.ProductType, error) {
 	return s.repo.GetAll()
 }
 
+func (s *ProductTypeService) GetByProductId(productId int) ([]domain.ProductType, error) {
+	return s.repo.GetByProductId(productId)
+}
+
 func (s *ProductTypeService) Add(pt domain.ProductType) (int64, error) {
 	return s.repo.Insert(pt)
 }

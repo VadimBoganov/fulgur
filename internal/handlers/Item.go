@@ -11,10 +11,27 @@ import (
 )
 
 func (h *Handler) GetAllItems(c *gin.Context) {
-	items, err := h.service.Item.GetAll()
-	if err != nil {
-		logger.Errorf("Error while handle get all product items request: %s", err.Error())
-		return
+	param := c.Query("productitemid")
+
+	var items []domain.Item
+	var err error
+	if len(param) > 0 {
+		productItemId, err := strconv.Atoi(param)
+		if err != nil {
+			logger.Errorf("Error while convert to int param from all product items request: %s", err.Error())
+			return
+		}
+		items, err = h.service.Item.GetByProductItemId(productItemId)
+		if err != nil {
+			logger.Errorf("Error while handle get param from all product items request: %s", err.Error())
+			return
+		}
+	} else {
+		items, err = h.service.Item.GetAll()
+		if err != nil {
+			logger.Errorf("Error while handle get all product items request: %s", err.Error())
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, items)

@@ -21,6 +21,7 @@ type Product interface {
 
 type ProductType interface {
 	GetAll() ([]domain.ProductType, error)
+	GetByProductId(productId int) ([]domain.ProductType, error)
 	Insert(pt domain.ProductType) (int64, error)
 	Update(pt domain.ProductType) error
 	Remove(id int) error
@@ -43,6 +44,7 @@ type ProductItem interface {
 
 type Item interface {
 	GetAll() ([]domain.Item, error)
+	GetByProductItemId(productItemId int) ([]domain.Item, error)
 	GetById(id int) (*domain.Item, error)
 	Insert(item domain.Item) (int64, error)
 	Update(item domain.Item) error

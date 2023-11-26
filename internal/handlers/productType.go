@@ -11,10 +11,26 @@ import (
 )
 
 func (h *Handler) GetAllProductTypes(c *gin.Context) {
-	pts, err := h.service.ProductType.GetAll()
-	if err != nil {
-		logger.Errorf("Error while handle get all products request: %s", err.Error())
-		return
+	param := c.Query("productid")
+	var pts []domain.ProductType
+	var err error
+	if len(param) > 0 {
+		productId, err := strconv.Atoi(param)
+		if err != nil {
+			logger.Errorf("Error while convert to int param from all product types request: %s", err.Error())
+			return
+		}
+		pts, err = h.service.ProductType.GetByProductId(productId)
+		if err != nil {
+			logger.Errorf("Error while handle get param from all product product types request: %s", err.Error())
+			return
+		}
+	} else {
+		pts, err = h.service.ProductType.GetAll()
+		if err != nil {
+			logger.Errorf("Error while handle get all product types request: %s", err.Error())
+			return
+		}
 	}
 
 	c.JSON(http.StatusOK, pts)

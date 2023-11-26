@@ -27,6 +27,10 @@ func (s *ItemService) GetById(id int) (*domain.Item, error) {
 	return s.repo.GetById(id)
 }
 
+func (s *ItemService) GetByProductItemId(productItemId int) ([]domain.Item, error) {
+	return s.repo.GetByProductItemId(productItemId)
+}
+
 func (s *ItemService) Add(item domain.Item, header *multipart.FileHeader) (int64, error) {
 	config := config.GetConfig()
 
