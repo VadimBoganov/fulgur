@@ -131,11 +131,17 @@ func (h *Handler) UpdateItem(c *gin.Context) {
 	}
 	item.Id = int32(id)
 
+	isFullPrice, err := strconv.ParseBool(multipartValue["IsFullPrice"][0])
+	if err != nil {
+		logger.Errorf("Error while read item isFullPrice request: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+	item.IsFullPrice = isFullPrice
+
 	var headers []*multipart.FileHeader
 	for _, fHeaders := range c.Request.MultipartForm.File {
-		for _, hdr := range fHeaders {
-			headers = append(headers, hdr)
-		}
+		headers = append(headers, fHeaders...)
 	}
 
 	if len(headers) > 0 {
@@ -154,6 +160,11 @@ func (h *Handler) UpdateItem(c *gin.Context) {
 			item.ImageUrl = data.ImageUrl
 		}
 		err = h.service.Item.Update(item, nil)
+		if err != nil {
+			logger.Errorf("Error while update item db: %s", err.Error())
+			_ = c.AbortWithError(400, err)
+			return
+		}
 	}
 
 	if err != nil {
