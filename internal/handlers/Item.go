@@ -66,6 +66,14 @@ func (h *Handler) PostItem(c *gin.Context) {
 	}
 	item.Price = float64(itemPrice)
 
+	isFullPrice, err := strconv.ParseBool(multipartValue["IsFullPrice"][0])
+	if err != nil {
+		logger.Errorf("Error while read item isFullPrice request: %s", err.Error())
+		_ = c.AbortWithError(400, err)
+		return
+	}
+	item.IsFullPrice = isFullPrice
+
 	var headers []*multipart.FileHeader
 	for _, fHeaders := range c.Request.MultipartForm.File {
 		for _, hdr := range fHeaders {
